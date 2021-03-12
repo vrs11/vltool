@@ -1,0 +1,44 @@
+connection:
+  host: "52.18.89.230"
+  user: "ubuntu"
+
+system:
+  drush: "/home/ubuntu/.composer/vendor/bin/drush"
+  targets:
+    stage: "/var/www/portals_stage/sites/"
+    prod: "/var/www/portals_prod/sites/"
+
+domains:
+  sites:
+    - "www.voltimum.at"
+    - "www.voltimum.ch"
+    - "www.voltimum.co.nz"
+    - "www.voltimum.co.uk"
+    - "www.voltimum.com.au"
+    - "www.voltimum.com.br"
+    - "www.voltimum.com.co"
+    - "www.voltimum.com.tr"
+    - "www.voltimum.de"
+    - "www.voltimum.es"
+    - "www.voltimum.fr"
+    - "www.voltimum.ie"
+    - "www.voltimum.it"
+    - "www.voltimum.pt"
+    - "www.voltimum.se"
+
+  aliases:
+    "at" : "www.voltimum.at"
+    "ch" : "www.voltimum.ch"
+    "co.nz" : "www.voltimum.co.nz"
+    "co.uk" : "www.voltimum.co.uk"
+    "com.au" : "www.voltimum.com.au"
+    "com.br" : "www.voltimum.com.br"
+    "com.co" : "www.voltimum.com.co"
+    "com.tr" : "www.voltimum.com.tr"
+    "de" : "www.voltimum.de"
+    "es" : "www.voltimum.es"
+    "fr" : "www.voltimum.fr"
+    "ie" : "www.voltimum.ie"
+    "it" : "www.voltimum.it"
+    "pt" : "www.voltimum.pt"
+    "se" : "www.voltimum.se"
