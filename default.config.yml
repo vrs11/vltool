@@ -1,0 +1,24 @@
+connection:
+  host: "host/ip"
+  user: "user"
+
+system:
+  drush: "path/to/drush"
+  targets:
+    stage: "/path/to/stage/sites/"
+    prod: "/path/to/prod/sites/"
+
+domains:
+  sites:
+    - "www.host-1.com"
+    - "www.host-2.com"
+    - "www.host-3.com"
+    - "www.host-4.com"
+    - "www.host-5.com"
+
+  aliases:
+    "h1" : "www.host-1.com"
+    "h2" : "www.host-2.com"
+    "h3" : "www.host-3.com"
+    "h4" : "www.host-4.com"
+    "h5" : "www.host-5.com"

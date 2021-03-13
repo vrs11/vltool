@@ -5,7 +5,7 @@ import pathlib
 
 
 def load_config():
-    path = str(pathlib.Path(__file__).parent.absolute()) + "/config.yml"
+    path = str(pathlib.Path(__file__).parent.absolute()) + "/default.config.yml"
     return yaml.safe_load(open(path))
 
 

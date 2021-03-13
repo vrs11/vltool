@@ -4,3 +4,5 @@
 .env
 .vscode
 venv
+vltool.build
+config.yml
