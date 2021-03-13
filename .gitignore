@@ -7,3 +7,18 @@ venv
 vltool.build
 config.yml
 vltool
+
+## OS specific mess.
+Thumbs.db
+.DS_Store
+
+## eclipse
+.project
+.buildpath
+/.settings
+
+## VS Code editor
+.history
+
+## NetBeans
+nbproject
