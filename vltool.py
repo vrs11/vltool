@@ -5,17 +5,17 @@ import pathlib
 
 
 def load_config():
-    path = str(pathlib.Path(__file__).parent.absolute()) + "/default.config.yml"
+    path = str(pathlib.Path(__file__).parent.absolute()) + "/config.yml"
     return yaml.safe_load(open(path))
 
 
-def remote_drush(target, commands, sites, base_dir, drush, user, host, password):
+def remote_drush(target, commands, sites, base_dir, drush, user, host, password, verbose):
     client = SSHClient()
     client.set_missing_host_key_policy(AutoAddPolicy())
     try:
         client.connect(host, username=user, password=password)
     except Exception:
-        print(Exception)
+        print("Cant connect :(")
         exit(6)
 
     for site in sites:
@@ -25,6 +25,11 @@ def remote_drush(target, commands, sites, base_dir, drush, user, host, password)
             print(target + "$> drush " + command + " [" + site + "] -> ", end="")
             if chan.recv_exit_status() == 0:
                 print("ok")
+                if verbose:
+                    # TODO: Dosent work now, investigate
+                    stdout = chan.makefile('rb', -1)
+                    for line in stdout.read().splitlines():
+                        print(line)
             else:
                 print("ERROR")
                 print(chan.recv_stderr(4096).decode('ascii'))
@@ -41,10 +46,12 @@ def get_args(domains):
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--target', help='Target environment [stage|prod]', default="stage")
+    parser.add_argument('-v', '--verbose', help='Show full output', action='store_true')
     parser.add_argument('-s', '--site', action='append', help='Target domains [co.uk|de|fr|...], if not specified all will be used')
     parser.add_argument('commands', nargs='*', default="cc all")
 
     args = parser.parse_args()
+    params['verbose'] = args.verbose
     params['target'] = args.target
 
     if type(args.commands) is str:
