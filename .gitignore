@@ -6,7 +6,7 @@
 venv
 vltool.build
 config.yml
-
+/vltool
 
 ## OS specific mess.
 Thumbs.db
