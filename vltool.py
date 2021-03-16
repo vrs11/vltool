@@ -26,7 +26,7 @@ def remote_drush(target, commands, sites, base_dir, drush, user, host, password,
             if chan.recv_exit_status() == 0:
                 print("ok")
                 if verbose:
-                    # TODO: Dosent work now, investigate
+                    # TODO: Dosent work now, investigate.
                     stdout = chan.makefile('rb', -1)
                     for line in stdout.read().splitlines():
                         print(line)
