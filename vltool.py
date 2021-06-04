@@ -9,9 +9,10 @@ def load_config():
     return yaml.safe_load(open(path))
 
 
-def remote_drush(target, commands, sites, base_dir, drush, user, host, password, verbose):
+def remote_drush(target, commands, sites, base_dir, drush, user, host, password, verbose, not_drush):
     client = SSHClient()
     client.set_missing_host_key_policy(AutoAddPolicy())
+    print(f"Connecting to {user}@{host}...", flush=True)
     try:
         client.connect(host, username=user, password=password)
     except Exception:
@@ -21,18 +22,20 @@ def remote_drush(target, commands, sites, base_dir, drush, user, host, password,
     for site in sites:
         for command in commands:
             chan = client.get_transport().open_session()
-            chan.exec_command("cd " + base_dir + site + "; " + drush + " " + command)
-            print(target + "$> drush " + command + " [" + site + "] -> ", end="")
+            if not_drush:
+                print(target + "$> " + command + " [" + site + "] -> ", end="", flush=True)
+                chan.exec_command("cd " + base_dir + site + "; " + command)
+            else:
+                print(target + "$> drush " + command + " [" + site + "] -> ", end="", flush=True)
+                chan.exec_command("cd " + base_dir + site + "; " + drush + " " + command)
             if chan.recv_exit_status() == 0:
                 print("ok")
                 if verbose:
-                    # TODO: Dosent work now, investigate.
-                    stdout = chan.makefile('rb', -1)
-                    for line in stdout.read().splitlines():
-                        print(line)
+                    print(chan.recv(4096).decode('utf8'), end="", flush=True)
+                    print(chan.recv_stderr(4096).decode('utf8'), flush=True)
             else:
-                print("ERROR")
-                print(chan.recv_stderr(4096).decode('ascii'))
+                print("ERROR", flush=True)
+                print(chan.recv_stderr(4096).decode('utf8'), flush=True)
 
     client.close()
 
@@ -45,6 +48,7 @@ def get_args(domains):
     params = dict()
 
     parser = argparse.ArgumentParser()
+    parser.add_argument('-n', '--not-drush', help='Do not use a drush command, run commands as is', action='store_true')
     parser.add_argument('-t', '--target', help='Target environment [stage|prod]', default="stage")
     parser.add_argument('-v', '--verbose', help='Show full output', action='store_true')
     parser.add_argument('-s', '--site', action='append', help='Target domains [co.uk|de|fr|...], if not specified all will be used')
@@ -52,6 +56,7 @@ def get_args(domains):
 
     args = parser.parse_args()
     params['verbose'] = args.verbose
+    params['not_drush'] = args.not_drush
     params['target'] = args.target
 
     if type(args.commands) is str:
